@@ -52,34 +52,25 @@ export function MatJacobiSeid(x0, A, b, tol, niter, met) {
         c++;
     }
 
+    const resultTable = xHistory.map((x, i) => {
+        const row = { Iter: i + 1, Error: E[i] };
+        x.forEach((val, j) => {
+            row[`x${j + 1}`] = val;
+        });
+        return row;
+    });
+
+    for (let i = 0; i < E.length; i++) {
+        E[i] = E[i] * 1e-3; // Convert error to a more readable format
+    }
+
     const result = {
         solution: x0.toArray(),
         iterations: c,
-        converged: error <= tol,
+        error: E,
         tolerance: tol,
-        errorHistory: E,
-        table: xHistory.map((x, i) => {
-            const row = { Iter: i + 1, Error: E[i] };
-            x.forEach((val, j) => {
-                row[`x${j + 1}`] = val;
-            });
-            return row;
-        })
+        table: resultTable
     };
 
     return result;
 }
-
-const cc = 34
-const A = [
-    [118, 1, cc, 2],
-    [8, 119, 1, cc],
-    [cc, 9, 100, 3],
-    [5, 9, cc, 113]
-];
-const b = [1000, 2000, 3000, 4000];
-const x0 = b;
-const tol = 5e-3;
-
-const result = MatJacobiSeid(x0, A, b, tol, 100, 1);
-console.table(result.table);

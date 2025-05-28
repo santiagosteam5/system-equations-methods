@@ -47,7 +47,6 @@ export function SOR(A, b, x0, tol, nIter, w) {
 
     for (let i = 0; i < errorList.length; i++) {
         errorList[i] = errorList[i] * 1e-3; // Convert error to a more readable format
-        i++;
     }
 
     // Final result
@@ -58,24 +57,6 @@ export function SOR(A, b, x0, tol, nIter, w) {
         tolerance: tol,
         table: resultTable
     };
-
+    
     return result;
 }
-
-
-let cc = 34
-let A = [[118, 1, cc, 2],
-        [8, 119, 1, cc],
-        [cc, 9, 100, 3],
-        [5, 9, cc, 113]];
-let b = [1000, 2000, 3000, 4000];
-let x0 = b;
-let tol = 5e-3;
-let w = 1.15;
-
-const result = SOR(A, b, x0, tol, 100, w);
-console.log("Solution:", result.solution, 
-            "Iterations:", result.iterations, 
-            "Error:", result.error, 
-            "Tolerance:", result.tolerance);
-console.table(result.table);
