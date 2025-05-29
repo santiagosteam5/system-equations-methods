@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { matrix } from 'mathjs';
 import { SOR } from '../methods/SOR';
 import { MatJacobiSeid } from '../methods/JacobiSeid';
-import sorgif from '/miku1.gif'; // Adjust the path as necessary
+import sorgif from '/miku1.gif';
+import jacobiseidgif from '/miku2.gif';
 import "../App.css";
 
 export default function InputForm({ method, onSubmit }) {
@@ -154,7 +155,7 @@ export default function InputForm({ method, onSubmit }) {
 
         {method === 'jacobi' && (
         <div className="gif-container">
-            <img src="/miku2.gif" alt="Animación del método de Jacobi" className="method-gif" />
+            <img src={jacobiseidgif} alt="Animación del método de Jacobi" className="method-gif" />
             <p className="gif-caption">Visualización del método de Jacobi</p>
         </div>)}
         </div>
