@@ -5,6 +5,7 @@ import { MatJacobiSeid } from '../methods/JacobiSeid';
 import sorgif from '/miku1.gif';
 import jacobiseidgif from '/miku2.gif';
 import "../App.css";
+import { generateText } from './CompareMethods';
 
 export default function InputForm({ method, onSubmit }) {
   const [size, setSize] = useState(4); // default 4x4
@@ -14,7 +15,16 @@ export default function InputForm({ method, onSubmit }) {
   const [tol, setTol] = useState(5e-3);
   const [niter, setNiter] = useState(100);
   const [w, setW] = useState(1.1); // only for SOR
-  const [newmethod, setMethod] = useState(''); // default method
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
+
+  const handleSubmit1 = async () => {
+    let tempinput = `con la matriz A ${JSON.stringify(A)}, el vector b ${JSON.stringify(b)}, el vector inicial x₀ ${JSON.stringify(x0)}, la tolerancia ${tol}, el número máximo de iteraciones ${niter}`;
+    tempinput += ` entre los metodos SOR, Jacobi y Gauss-Seidel, ¿Cual seria el mejor método para resolver este sistema de ecuaciones? se breve y conciso; no mas de 200 palabras.`;
+    setInput(tempinput);
+    const result = await generateText(input);
+    setOutput(result);
+  };
 
   function generateMatrix(n) {
     return Array.from({ length: n }, () => Array(n).fill(0));
@@ -42,9 +52,10 @@ export default function InputForm({ method, onSubmit }) {
     let result;
     if (method === 'sor') {
         result = SOR(A, b, x0, tol, niter, w);
+    } else if (method === 'gauss-seidel') {
+        result = MatJacobiSeid(x0, A, b, tol, niter, 1);
     } else {
-        const isJacobi = newmethod === 'jacobi';
-        result = MatJacobiSeid(x0, A, b, tol, niter, isJacobi ? 0 : 1);
+        result = MatJacobiSeid(x0, A, b, tol, niter, 0);
     }
     
     onSubmit(result);
@@ -131,19 +142,16 @@ export default function InputForm({ method, onSubmit }) {
         </div>
       )}
 
-      {method === 'jacobi' && (
-        <div>
-          <label>Method: </label>
-          <select onChange={(e) => setMethod(e.target.value)} value={newmethod}>
-            <option value='' disabled>Select Method</option>
-            <option value='jacobi'>Jacobi</option>
-            <option value='gauss-seidel'>Gauss-Seidel</option>
-          </select>
-        </div>
-      )}
-
       <br></br>
       <button onClick={handleSubmit}>Calculate</button>
+
+      <br></br>
+      <div className="p-4">
+          <h3 className="text-2xl font-bold">Comparar metodos</h3>
+          <button onClick={handleSubmit1} className="mt-2 px-4 py-2 bg-blue-500 text-white">comparar</button>
+          <div className="mt-4 border p-2">{output}</div>
+          <br></br>
+        </div>
 
       </div>
         <div className="gif-section">
@@ -157,6 +165,12 @@ export default function InputForm({ method, onSubmit }) {
         <div className="gif-container">
             <img src={jacobiseidgif} alt="Animación del método de Jacobi" className="method-gif" />
             <p className="gif-caption">Visualización del método de Jacobi</p>
+        </div>)}
+
+        {method === 'gauss-seidel' && (
+        <div className="gif-container">
+            <img src={jacobiseidgif} alt="Animación del método de gauss-seidel" className="method-gif" />
+            <p className="gif-caption">Visualización del método de gauss-seidel</p>
         </div>)}
         </div>
     </div>

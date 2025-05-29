@@ -12,8 +12,9 @@ export default function MethodSelector({ onSelect }) {
         defaultValue=""
       >
         <option value="" disabled>Select a method</option>
-        <option value="jacobi">Jacobi / Gauss-Seidel</option>
+        <option value="jacobi">Jacobi</option>
         <option value="sor">SOR</option>
+        <option value="gauss-seidel">Gauss-Seidel</option>
       </select>
     </div>
   );
